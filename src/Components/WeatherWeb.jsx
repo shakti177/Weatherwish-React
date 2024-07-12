@@ -32,7 +32,7 @@ const WeatherWeb = () => {
         <h2 className="flex items-center gap-2 text-xl font-[600]">
           <TiWeatherPartlySunny size={22} /> WEATHERWISE
         </h2>
-        <div className="flex items-center border-2 border-black py-1 px-4 rounded-xl">
+        <div className="flex items-center border-2 border-black py-1 px-4 rounded-xl max-xs:hidden">
           <input
             type="text"
             onChange={handleCity}
@@ -45,39 +45,42 @@ const WeatherWeb = () => {
         </div>
       </div>
       {/* weather Hero Section */}
-      <div className="p-16">
+      <div className="p-16 max-xs:p-5">
         {weatherData && (
           <div className="flex flex-col justify-center items-center">
             <div className="flex flex-col items-center justify-center">
-              <h2 className="text-[28px] font-[600]">
+              <h2 className="text-[28px] font-[600] max-xs:text-[18px] ">
                 {weatherData.resolvedAddress}
               </h2>
-              <p className="text-[19px] font-[600] mt-3">
+              <p className="text-[19px] font-[600] mt-3 max-xs:text-[16px]">
                 {weatherData.days[0].datetime}
               </p>
-              <div className="flex items-center gap-9">
+              <div className="flex items-center gap-9 max-xs:gap-2">
                 <img
                   src={`https://raw.githubusercontent.com/visualcrossing/WeatherIcons/main/PNG/2nd%20Set%20-%20Color/${weatherData.currentConditions.icon}.png`}
                   alt=""
-                  className="w-[120px] h-[120px]"
+                  className="w-[120px] h-[120px] max-xs:w-[60px] max-xs:h-[60px]"
                 />
 
-                <h1 className="text-[143px] font-[600]">
-                  {weatherData.currentConditions.temp} °c
+                <h1 className="text-[143px] font-[600] max-xs:text-[60px]">
+                  {weatherData.currentConditions.temp}°c
                 </h1>
               </div>
-              <p className="text-[23px]">
+              <p className="text-[23px] max-xs:text-[16px]">
                 {weatherData.currentConditions.conditions}
               </p>
             </div>
-            <div className="flex gap-6 mt-10">
+
+            {/* hero bottom */}
+
+            <div className="flex flex-wrap gap-6 mt-10 max-xs:flex-col">
               <div className="flex gap-3">
                 <div className="bg-[#121B27] flex items-center justify-center p-4 rounded-md">
                   <FaTemperatureThreeQuarters size={32} color="white" />
                 </div>
-                <div>
-                  <h2 className="text-xl font-[500]">Temperature</h2>
-                  <h2 className="text-xl font-[500]">
+                <div className="text-xl font-[500] max-xs:text-[14px]">
+                  <h2>Temperature</h2>
+                  <h2>
                     High {weatherData.days[0].feelslikemax}° / Low{" "}
                     {weatherData.days[0].feelslikemin}°
                   </h2>
@@ -87,33 +90,27 @@ const WeatherWeb = () => {
                 <div className="bg-[#121B27] flex items-center justify-center p-4 rounded-md">
                   <FaWind size={32} color="white" />
                 </div>
-                <div>
-                  <h2 className="text-xl font-[500]">Wind</h2>
-                  <h2 className="text-xl font-[500]">
-                    {weatherData.currentConditions.windspeed} km/h
-                  </h2>
+                <div className="text-xl font-[500] max-xs:text-[14px]">
+                  <h2>Wind</h2>
+                  <h2>{weatherData.currentConditions.windspeed} km/h</h2>
                 </div>
               </div>
               <div className="flex gap-3">
                 <div className="bg-[#121B27] flex items-center justify-center p-4 rounded-md">
                   <GiDroplets size={32} color="white" />
                 </div>
-                <div>
-                  <h2 className="text-xl font-[500]">Humidity</h2>
-                  <h2 className="text-xl font-[500]">
-                    {weatherData.currentConditions.humidity}%
-                  </h2>
+                <div className="text-xl font-[500] max-xs:text-[14px]">
+                  <h2>Humidity</h2>
+                  <h2>{weatherData.currentConditions.humidity}%</h2>
                 </div>
               </div>
               <div className="flex gap-3">
                 <div className="bg-[#121B27] flex items-center justify-center p-4 rounded-md">
                   <HiMiniEye size={32} className="text-white" />
                 </div>
-                <div>
-                  <h2 className="text-xl font-[500]">Visibility</h2>
-                  <h2 className="text-xl font-[500]">
-                    {weatherData.currentConditions.visibility} km
-                  </h2>
+                <div className="text-xl font-[500] max-xs:text-[14px]">
+                  <h2>Visibility</h2>
+                  <h2>{weatherData.currentConditions.visibility} km</h2>
                 </div>
               </div>
             </div>
