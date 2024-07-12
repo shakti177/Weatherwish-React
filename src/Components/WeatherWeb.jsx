@@ -5,6 +5,7 @@ import { FaTemperatureThreeQuarters } from "react-icons/fa6";
 import { FaWind } from "react-icons/fa";
 import { GiDroplets } from "react-icons/gi";
 import { HiMiniEye } from "react-icons/hi2";
+import { FaMapLocationDot } from "react-icons/fa6";
 
 const WeatherWeb = () => {
   const [city, setCity] = useState("");
@@ -49,8 +50,16 @@ const WeatherWeb = () => {
         {weatherData && (
           <div className="flex flex-col justify-center items-center">
             <div className="flex flex-col items-center justify-center">
-              <h2 className="text-[28px] font-[600] max-md:text-[18px] ">
+              <h2 className="flex items-center gap-3 text-[28px] font-[600] max-md:text-[18px] ">
                 {weatherData.resolvedAddress}
+                <a
+                  href={`https://www.google.com/maps/place/${weatherData.address}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:cursor-pointer"
+                >
+                  <FaMapLocationDot />
+                </a>
               </h2>
               <p className="text-[19px] font-[600] mt-3 max-md:text-[16px]">
                 {weatherData.days[0].datetime}
@@ -114,7 +123,9 @@ const WeatherWeb = () => {
                 </div>
               </div>
             </div>
-            <p className="mt-16 text-xl">{weatherData.description}</p>
+            <p className="mt-16 text-xl max-md:text-base">
+              {weatherData.description}
+            </p>
           </div>
         )}
       </div>
