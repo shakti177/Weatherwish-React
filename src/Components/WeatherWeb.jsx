@@ -11,7 +11,7 @@ const WeatherWeb = () => {
   const [city, setCity] = useState("");
   const [weatherData, setWeatherData] = useState();
 
-  const APIKey = "G2UVJ3Z4STVCFBG8NWSTX6J2Q";
+  const APIKey = process.env.API_KEY;
   const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?key=${APIKey}&unitGroup=metric&IconSet=icons1`;
 
   const fetchWeatherData = async () => {
