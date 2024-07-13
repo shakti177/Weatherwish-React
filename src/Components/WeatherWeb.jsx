@@ -40,6 +40,12 @@ const WeatherWeb = () => {
     setCity(e.target.value);
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      fetchWeatherData();
+    }
+  };
+
   return (
     <>
       {/* Navbar */}
@@ -53,6 +59,7 @@ const WeatherWeb = () => {
             onChange={handleCityChange}
             placeholder="Enter City Name"
             className="outline-none"
+            onKeyDown={handleKeyDown}
           />
           <button onClick={fetchWeatherData}>
             <LuMapPin />
