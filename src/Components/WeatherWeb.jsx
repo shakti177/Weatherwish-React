@@ -9,26 +9,40 @@ import { FaMapLocationDot } from "react-icons/fa6";
 
 const WeatherWeb = () => {
   const [city, setCity] = useState("");
-  const [weatherData, setWeatherData] = useState();
+  const [weatherData, setWeatherData] = useState(null);
+  const [error, setError] = useState(null);
 
-  const APIKey = process.env.API_KEY;
-  const url = `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?key=${APIKey}&unitGroup=metric&IconSet=icons1`;
+  const APIKey = process.env.REACT_APP_API_KEY;
 
   const fetchWeatherData = async () => {
-    const response = await fetch(url);
-    const data = await response.json();
-    setWeatherData(data);
-    console.log(data);
+    if (!city) {
+      setError("Please enter a city name.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?key=${APIKey}&unitGroup=metric&IconSet=icons1`
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setWeatherData(data);
+      setError(null);
+    } catch (error) {
+      setError("Failed to fetch weather data. Please try again.");
+      console.error("Error fetching weather data:", error);
+    }
   };
 
-  const handleCity = (e) => {
-    e.preventDefault();
+  const handleCityChange = (e) => {
     setCity(e.target.value);
   };
 
   return (
     <>
-      {/* navbar */}
+      {/* Navbar */}
       <div className="flex flex-row justify-between items-center p-6 w-[100%]">
         <h2 className="flex items-center gap-2 text-xl font-[600]">
           <TiWeatherPartlySunny size={22} /> WEATHERWISE
@@ -36,7 +50,7 @@ const WeatherWeb = () => {
         <div className="flex items-center border-2 border-black py-1 px-4 rounded-xl max-md:hidden">
           <input
             type="text"
-            onChange={handleCity}
+            onChange={handleCityChange}
             placeholder="Enter City Name"
             className="outline-none"
           />
@@ -45,8 +59,9 @@ const WeatherWeb = () => {
           </button>
         </div>
       </div>
-      {/* weather Hero Section */}
+      {/* Weather Hero Section */}
       <div className="p-16 max-md:p-5">
+        {error && <p className="text-red-500">{error}</p>}
         {weatherData && (
           <div className="flex flex-col justify-center items-center">
             <div className="flex flex-col items-center justify-center">
@@ -70,7 +85,6 @@ const WeatherWeb = () => {
                   alt=""
                   className="w-[120px] h-[120px] max-md:w-[60px] max-md:h-[60px]"
                 />
-
                 <h1 className="text-[143px] font-[600] max-md:text-[60px]">
                   {weatherData.currentConditions.temp}°c
                 </h1>
@@ -80,8 +94,7 @@ const WeatherWeb = () => {
               </p>
             </div>
 
-            {/* hero bottom */}
-
+            {/* Hero Bottom */}
             <div className="flex flex-wrap gap-6 mt-10 max-md:flex-col">
               <div className="flex gap-3">
                 <div className="bg-[#121B27] flex items-center justify-center p-4 rounded-md">
