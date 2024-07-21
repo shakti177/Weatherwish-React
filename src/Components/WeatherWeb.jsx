@@ -53,7 +53,7 @@ const WeatherWeb = () => {
         <h2 className="flex items-center gap-2 text-xl font-[600]">
           <TiWeatherPartlySunny size={22} /> WEATHERWISE
         </h2>
-        <div className="flex items-center border-2 border-black py-1 px-4 rounded-xl max-md:hidden">
+        <div className="flex items-center border-2 border-black py-1 px-4 rounded-full max-md:hidden">
           <input
             type="text"
             onChange={handleCityChange}
