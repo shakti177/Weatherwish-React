@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { LuMapPin } from "react-icons/lu";
 import { TiWeatherPartlySunny } from "react-icons/ti";
 import { FaTemperatureThreeQuarters } from "react-icons/fa6";
@@ -6,65 +7,62 @@ import { FaWind } from "react-icons/fa";
 import { GiDroplets } from "react-icons/gi";
 import { HiMiniEye } from "react-icons/hi2";
 import { FaMapLocationDot } from "react-icons/fa6";
+import loader from "../Assets/loader.gif";
 
 const WeatherWeb = () => {
-  const [city, setCity] = useState("");
+  const [searchParams] = useSearchParams();
+  const city = searchParams.get("city");
   const [weatherData, setWeatherData] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const APIKey = process.env.REACT_APP_API_KEY;
 
-  const fetchWeatherData = async () => {
-    if (!city) {
-      setError("Please enter a city name.");
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?key=${APIKey}&unitGroup=metric&IconSet=icons1`
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      if (!city) {
+        setError("Please enter a city name.");
+        setLoading(false);
+        return;
       }
-      const data = await response.json();
-      setWeatherData(data);
-      setError(null);
-    } catch (error) {
-      setError("Failed to fetch weather data. Please try again.");
-      console.error("Error fetching weather data:", error);
-    }
-  };
 
-  const handleCityChange = (e) => {
-    setCity(e.target.value);
-  };
+      try {
+        setLoading(true);
+        const response = await fetch(
+          `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${city}?key=${APIKey}&unitGroup=metric&IconSet=icons1`
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setWeatherData(data);
+        setError(null);
+      } catch (error) {
+        setError("Failed to fetch weather data. Please try again.");
+        console.error("Error fetching weather data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      fetchWeatherData();
-    }
-  };
+    fetchWeatherData();
+  }, [city, APIKey]);
 
   return (
     <>
       {/* Navbar */}
-      <div className="flex flex-row justify-between items-center p-6 w-[100%]">
-        <h2 className="flex items-center gap-2 text-xl font-[600]">
-          <TiWeatherPartlySunny size={22} /> WEATHERWISE
-        </h2>
-        <div className="flex items-center border-2 border-black py-1 px-4 rounded-full max-md:hidden">
-          <input
-            type="text"
-            onChange={handleCityChange}
-            placeholder="Enter City Name"
-            className="outline-none"
-            onKeyDown={handleKeyDown}
-          />
-          <button onClick={fetchWeatherData}>
-            <LuMapPin />
-          </button>
+
+      {loading && (
+        <div className="fixed top-0 left-0 w-full h-full bg-white flex justify-center items-center">
+          <img src={loader} alt="" className="w-[400px] h-[300px]" />
         </div>
+      )}
+      <div className="flex flex-row justify-between items-center p-6 w-[100%]">
+        <h2>
+          <Link to="/" className="flex items-center gap-2 text-xl font-[600]">
+            <TiWeatherPartlySunny size={22} /> WEATHERWISE
+          </Link>
+        </h2>
       </div>
       {/* Weather Hero Section */}
       <div className="p-16 max-md:p-5">
